@@ -10,20 +10,20 @@ def load_model_and_scaler(model_path, scaler_path):
 
 def generate_level_configurations(num_samples=100):
     # Randomly generate level configurations
-    averageWidths = np.random.uniform(3, 4, num_samples)
-    averageHeights = np.random.uniform(3, 4, num_samples)
-    rectNumber = np.random.randint(4, 6, num_samples)
-    minPrefabDistance = np.random.uniform(5, 5, num_samples)
+    averageWidths = np.random.uniform(1, 5, num_samples)
+    averageHeights = np.random.uniform(1, 5, num_samples)
+    rectNumber = np.random.randint(4, 8, num_samples)
+    minPrefabDistance = np.random.uniform(2, 5, num_samples)
     numGoodPrefabs = np.random.randint(0, 10, num_samples)
     numBadPrefabs = np.random.randint(0, 10, num_samples)
-    averageDistanceGood = np.random.uniform(5, 6, num_samples)
-    averageDistanceBad = np.random.uniform(5, 6, num_samples)
+    averageDistanceGood = np.random.uniform(2, 4, num_samples)
+    averageDistanceBad = np.random.uniform(2, 4, num_samples)
     pathfindingObstacles = np.random.randint(0, 10, num_samples)
-    numberOfEnemies = np.random.randint(0, 10, num_samples)
+    numberOfEnemies = np.random.randint(0, 5, num_samples)
     minX = np.random.uniform(-10, -8, num_samples)
-    maxX = np.random.uniform(6, 8, num_samples)
+    maxX = np.random.uniform(6, 12, num_samples)
     minY = np.random.uniform(0, 2, num_samples)
-    maxY = np.random.uniform(5, 10, num_samples)
+    maxY = np.random.uniform(5, 8, num_samples)
 
     return np.column_stack((averageWidths, averageHeights, rectNumber, minPrefabDistance, numGoodPrefabs, numBadPrefabs, averageDistanceGood, averageDistanceBad, pathfindingObstacles, numberOfEnemies, minX, maxX, minY, maxY))
 
