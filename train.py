@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
-
+import numpy as np
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, mean_absolute_error
@@ -27,6 +27,11 @@ def read_and_preprocess_data(file_path):
 
     return data
 
+
+
+# Set the option to display all rows and columns (use with caution for very large DataFrames)
+pd.set_option('display.max_rows', None)  # None means unlimited
+pd.set_option('display.max_columns', None)  # None means unlimited
 
 # List of file paths for different categories
 file_paths = [
@@ -55,6 +60,9 @@ file_paths = [
 
 ]
 
+
+Difficulty = 3
+
 # Initialize a list to store the dataframes
 dfs = []
 
@@ -73,23 +81,48 @@ for i, df in enumerate(dfs):
 
 # Concatenate dataframes horizontally
 final_df = pd.concat(dfs, axis=1)
-final_df['Attempts_Closeness'] = final_df['Attempts_Data_0'].apply(lambda x: abs(x - 3))
+final_df['Attempts_Closeness'] = final_df['Attempts_Data_0'].apply(lambda x: abs(x - Difficulty))
+#print(final_df)
+
+
+
+# Assuming final_df is your DataFrame after concatenation and adding 'Attempts_Closeness'
+
+# Placeholder for row indices to drop
+rows_to_drop = []
+
+# Iterate over the DataFrame, except for the last row
+for i in range(len(final_df) - 1):
+    # Check if the next row's 'Attempts_Data_0' value is exactly one more than the current row's value
+    if final_df.loc[i + 1, 'Attempts_Data_0'] == final_df.loc[i, 'Attempts_Data_0'] + 1:
+        # Mark the current row for deletion
+        rows_to_drop.append(i)
+
+# Drop the marked rows
+final_df_dropped = final_df.drop(rows_to_drop)
+
+# Reset index if necessary
+final_df_dropped.reset_index(drop=True, inplace=True)
+
+print(f"Rows removed: {len(rows_to_drop)}")
+#print(final_df_dropped)
+
 
 # Two target variables
 y = final_df[['Attempts_Closeness', 'EndTriggerReached_Data_0']]
 X = final_df.drop(columns=['Attempts_Data_0', 'Attempts_Closeness', 'EndTriggerReached_Data_0'])
 
 # Specify the file path for the CSV
-csv_file_path = 'final_dataframe.csv'
+#csv_file_path = 'final_dataframe.csv'
 
 # Write the DataFrame to a CSV file
-final_df.to_csv(csv_file_path, index=False)
+#final_df.to_csv(csv_file_path, index=False)
 
-print(f"DataFrame saved as CSV at: {csv_file_path}")
+#print(f"DataFrame saved as CSV at: {csv_file_path}")
 
 
-print(y)
-print(X)
+#print(y)
+#print(X)
 # Splitting the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
